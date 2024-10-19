@@ -20,13 +20,7 @@ import net.povstalec.stellarview.StellarView;
 import net.povstalec.stellarview.client.render.level.StellarViewEndEffects;
 import net.povstalec.stellarview.client.render.level.StellarViewNetherEffects;
 import net.povstalec.stellarview.client.render.level.StellarViewOverworldEffects;
-import net.povstalec.stellarview.client.resourcepack.objects.BlackHole;
-import net.povstalec.stellarview.client.resourcepack.objects.Moon;
-import net.povstalec.stellarview.client.resourcepack.objects.Nebula;
-import net.povstalec.stellarview.client.resourcepack.objects.Planet;
-import net.povstalec.stellarview.client.resourcepack.objects.SpaceObject;
-import net.povstalec.stellarview.client.resourcepack.objects.Star;
-import net.povstalec.stellarview.client.resourcepack.objects.StarField;
+import net.povstalec.stellarview.client.resourcepack.objects.*;
 import net.povstalec.stellarview.client.resourcepack.objects.distinct.Sol;
 
 public class ResourcepackReloadListener
@@ -38,6 +32,7 @@ public class ResourcepackReloadListener
 
 	public static final String PLANET = "planet";
 	public static final String MOON = "moon";
+	public static final String COMET = "comet";
 	
 	public static final String STAR = "star";
 	public static final String BLACK_HOLE = "black_hole";
@@ -81,6 +76,9 @@ public class ResourcepackReloadListener
 					
 					else if(canShortenPath(location, MOON))
 						addMoon(spaceObjects, location, element);
+
+					else if(canShortenPath(location, COMET))
+						addComet(spaceObjects, location, element);
 					
 					else if(canShortenPath(location, STAR))
 						addStar(spaceObjects, location, element);
@@ -204,6 +202,22 @@ public class ResourcepackReloadListener
 
 				spaceObjects.put(location, moon);
 				StellarView.LOGGER.debug("Parsed " + location.toString() + " as Moon");
+			}
+			catch(RuntimeException e)
+			{
+				StellarView.LOGGER.error("Could not load " + location.toString() + " " + e);
+			}
+		}
+
+		private static void addComet(HashMap<ResourceLocation, SpaceObject> spaceObjects, ResourceLocation location, JsonElement element)
+		{
+			try
+			{
+				JsonObject json = GsonHelper.convertToJsonObject(element, "comet");
+				Comet comet = Comet.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, msg -> StellarView.LOGGER.error("Failed to parse Comet", msg));
+
+				spaceObjects.put(location, comet);
+				StellarView.LOGGER.debug("Parsed " + location.toString() + " as Comet");
 			}
 			catch(RuntimeException e)
 			{
