@@ -17,7 +17,7 @@
 		
 		{
 			"texture": "stellarview:textures/environment/halo_template.png",
-			"rgba": {"red": 255, "green": 255, "blue": 255, "alpha": 255},
+			"rgba": {"red": 255, "green": 183, "blue": 76, "alpha": 255},
 			"blend": true,
 			"size": 2439700,
 			"min_size": 0.4,
