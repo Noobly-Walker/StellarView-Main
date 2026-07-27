@@ -329,9 +329,10 @@ public abstract class MeteorEffect
 
 	public static class TwinklingStar extends MeteorEffect
 	{
-		protected static final int TICKS = 50;
-		protected static final float MAX_SIZE = 1;
-		protected static final int DURATION = 40;
+		protected static final int TICKS = 80;        // How frequently a new "batch" can start
+		protected static final int DURATION = 45;     // Lifetime of each individual star
+		protected static final int MIN_STARS = 20;
+		protected static final int MAX_STARS = 400;     // Adjust to taste
 
 		public static final Codec<TwinklingStar> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				MeteorType.CODEC.listOf().fieldOf("meteor_types").forGetter(TwinklingStar::getMeteorTypes),
@@ -364,34 +365,49 @@ public abstract class MeteorEffect
 			if (!canRender(viewCenter))
 				return;
 
-			long tickSeed = viewCenter.ticks() / TICKS;
-			int specificTime = (int) (viewCenter.ticks() % TICKS);
+			long batchSeed = viewCenter.ticks() / TICKS;
+			Random batchRandom = new Random(batchSeed);
 
-			Random randomizer = new Random(tickSeed);
-			int randomStart = randomizer.nextInt(0, TICKS - DURATION);
+			// Only trigger a new batch occasionally
+			if (!shouldAppear(viewCenter, batchSeed))
+				return;
 
-			if (shouldAppear(viewCenter, tickSeed) &&
-					specificTime >= randomStart &&
-					specificTime < randomStart + DURATION)
+			int starCount = batchRandom.nextInt(MIN_STARS, MAX_STARS + 1);
+
+			for (int i = 0; i < starCount; i++)
 			{
-				// Fixed position - no movement
-				long meteorRandomizer = viewCenter.ticks() / DURATION;
-				Random random = new Random(meteorRandomizer);
+				long starSeed = batchSeed + i;                    // Unique seed per star
+				Random starRandom = new Random(starSeed);
 
-				// Fixed rotations - these stay the same for the whole duration
-				float xRotation = random.nextInt(0, 90);      // Wider range is fine since it doesn't move
-				float yRotation = random.nextInt(0, 360);
-				float zRotation = random.nextInt(-60, 60);
+				// Random start time within the batch window
+				int randomStart = starRandom.nextInt(0, TICKS - DURATION);
 
-				MeteorType meteorType = getRandomMeteorType(tickSeed);
+				int specificTime = (int) (viewCenter.ticks() % TICKS);
 
-				// Gentle fade in/out using sine
-				double position = (double) (specificTime - randomStart) / DURATION;
-				float size = (float) Math.sin(Math.PI * position);   // 0 → 1 → 0
-				float rotation = (float) (Math.PI * position * 2);   // Optional slow spin
+				if (specificTime >= randomStart && specificTime < randomStart + DURATION)
+				{
+					// === Per-star data ===
+					long meteorRandomizer = starSeed;             // Fixed for this star's lifetime
 
-				this.render(viewCenter, level, camera, partialTicks, stack, bufferbuilder,
-						xRotation, yRotation, zRotation, meteorType, size, rotation);
+					float xRotation = starRandom.nextInt(0, 120);   // Wide distribution for sky coverage
+					float yRotation = starRandom.nextInt(0, 360);
+					float zRotation = starRandom.nextInt(-75, 75);
+
+					MeteorType meteorType = getRandomMeteorType(starSeed);
+
+					// Animation progress for this specific star
+					double position = (double) (specificTime - randomStart) / DURATION;
+
+					float size = (float) Math.sin(Math.PI * position);           // 0 → 1 → 0
+					float rotation = (float) (Math.PI * position * 3);           // Gentle twinkling spin
+
+					// Optional: slight random brightness variation per star
+					// float brightnessMul = 0.7f + starRandom.nextFloat() * 0.6f;
+
+					this.render(viewCenter, level, camera, partialTicks, stack, bufferbuilder,
+							xRotation, yRotation, zRotation,
+							meteorType, size, rotation);
+				}
 			}
 		}
 	}
