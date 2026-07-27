@@ -344,10 +344,7 @@ public abstract class MeteorEffect
 			super(meteorTypes, rarity);
 		}
 
-		public TwinklingStar()
-		{
-			this(new ArrayList<MeteorType>(), 0);
-		}
+		public TwinklingStar() { this(new ArrayList<MeteorType>(), 0); }
 
 		@Override
 		public double getRarity(ViewCenter viewCenter)
@@ -400,9 +397,6 @@ public abstract class MeteorEffect
 
 					float size = (float) Math.sin(Math.PI * position);           // 0 → 1 → 0
 					float rotation = (float) (Math.PI * position * 3);           // Gentle twinkling spin
-
-					// Optional: slight random brightness variation per star
-					// float brightnessMul = 0.7f + starRandom.nextFloat() * 0.6f;
 
 					this.render(viewCenter, level, camera, partialTicks, stack, bufferbuilder,
 							xRotation, yRotation, zRotation,
