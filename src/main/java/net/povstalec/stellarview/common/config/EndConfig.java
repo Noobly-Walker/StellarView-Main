@@ -13,6 +13,7 @@ public class EndConfig
 	
 	public static StellarViewConfigValue.IntValue meteor_shower_chance;
 	public static StellarViewConfigValue.IntValue shooting_star_chance;
+	public static StellarViewConfigValue.IntValue twinkling_star_chance;
 	
 	public static void init(ForgeConfigSpec.Builder client)
 	{
@@ -38,5 +39,8 @@ public class EndConfig
 		shooting_star_chance = new StellarViewConfigValue.IntValue(client, PREFIX + "shooting_star_chance", 
 				10, 0, 100, 
 				"Chance of a shooting star appearing each 1000 ticks");
+		twinkling_star_chance = new StellarViewConfigValue.IntValue(client, PREFIX + "twinkling_star_chance",
+				90, 0, 100,
+				"Chance of twinkling stars happening every tick");
 	}
 }

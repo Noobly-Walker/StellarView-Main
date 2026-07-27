@@ -51,6 +51,9 @@ public class TwilightForestConfigScreen extends Screen
 		this.configList.add(new SliderConfigEntry(Component.translatable("gui.stellarview.shooting_star_chance").append(Component.literal(": ")),
 				Component.literal("\u0025"),
 				this.width, TwilightForestConfig.shooting_star_chance));
+		this.configList.add(new SliderConfigEntry(Component.translatable("gui.stellarview.twinkling_star_chance").append(Component.literal(": ")),
+				Component.literal("\u0025"),
+				this.width, TwilightForestConfig.twinkling_star_chance));
 		
 		this.addWidget(this.configList);
 

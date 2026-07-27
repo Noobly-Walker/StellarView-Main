@@ -23,7 +23,6 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 import net.povstalec.stellarview.client.resourcepack.ViewCenter;
-import net.povstalec.stellarview.common.config.GeneralConfig;
 import net.povstalec.stellarview.common.util.Color;
 import net.povstalec.stellarview.common.util.SphericalCoords;
 import net.povstalec.stellarview.common.util.StellarCoordinates;
@@ -322,6 +321,77 @@ public abstract class MeteorEffect
 				float size = (float) (Math.sin(Math.PI * position / DURATION));
 
 				this.render(viewCenter, level, camera, partialTicks, stack, bufferbuilder, xRotation, yRotation, zRotation, meteorType, size, rotation);
+			}
+		}
+	}
+
+
+
+	public static class TwinklingStar extends MeteorEffect
+	{
+		protected static final int TICKS = 50;
+		protected static final float MAX_SIZE = 1;
+		protected static final int DURATION = 40;
+
+		public static final Codec<TwinklingStar> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				MeteorType.CODEC.listOf().fieldOf("meteor_types").forGetter(TwinklingStar::getMeteorTypes),
+				Codec.DOUBLE.fieldOf("probability").forGetter(TwinklingStar::getRarity)
+		).apply(instance, TwinklingStar::new));
+
+		public TwinklingStar(List<MeteorType> meteorTypes, double rarity)
+		{
+			super(meteorTypes, rarity);
+		}
+
+		public TwinklingStar()
+		{
+			this(new ArrayList<MeteorType>(), 0);
+		}
+
+		@Override
+		public double getRarity(ViewCenter viewCenter)
+		{
+			if (!viewCenter.overrideMeteorEffects())
+				return rarity;
+
+			return viewCenter.overrideTwinklingStarRarity();
+		}
+
+		@Override
+		public final void render(ViewCenter viewCenter, ClientLevel level, Camera camera,
+								 float partialTicks, PoseStack stack, BufferBuilder bufferbuilder)
+		{
+			if (!canRender(viewCenter))
+				return;
+
+			long tickSeed = viewCenter.ticks() / TICKS;
+			int specificTime = (int) (viewCenter.ticks() % TICKS);
+
+			Random randomizer = new Random(tickSeed);
+			int randomStart = randomizer.nextInt(0, TICKS - DURATION);
+
+			if (shouldAppear(viewCenter, tickSeed) &&
+					specificTime >= randomStart &&
+					specificTime < randomStart + DURATION)
+			{
+				// Fixed position - no movement
+				long meteorRandomizer = viewCenter.ticks() / DURATION;
+				Random random = new Random(meteorRandomizer);
+
+				// Fixed rotations - these stay the same for the whole duration
+				float xRotation = random.nextInt(0, 90);      // Wider range is fine since it doesn't move
+				float yRotation = random.nextInt(0, 360);
+				float zRotation = random.nextInt(-60, 60);
+
+				MeteorType meteorType = getRandomMeteorType(tickSeed);
+
+				// Gentle fade in/out using sine
+				double position = (double) (specificTime - randomStart) / DURATION;
+				float size = (float) Math.sin(Math.PI * position);   // 0 → 1 → 0
+				float rotation = (float) (Math.PI * position * 2);   // Optional slow spin
+
+				this.render(viewCenter, level, camera, partialTicks, stack, bufferbuilder,
+						xRotation, yRotation, zRotation, meteorType, size, rotation);
 			}
 		}
 	}

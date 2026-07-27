@@ -30,6 +30,7 @@ public final class DefaultViewCenters
 				
 				MeteorEffect.ShootingStar.CODEC.optionalFieldOf("shooting_star").forGetter(viewCenter -> Optional.ofNullable(viewCenter.shootingStar)),
 				MeteorEffect.MeteorShower.CODEC.optionalFieldOf("meteor_shower").forGetter(viewCenter -> Optional.ofNullable(viewCenter.meteorShower)),
+				MeteorEffect.TwinklingStar.CODEC.optionalFieldOf("twinkling_star").forGetter(viewCenter -> Optional.ofNullable(viewCenter.twinklingStar)),
 				
 				Codec.BOOL.optionalFieldOf("create_horizon", true).forGetter(viewCenter -> viewCenter.createHorizon),
 				Codec.BOOL.optionalFieldOf("create_void", true).forGetter(viewCenter -> viewCenter.createVoid),
@@ -41,12 +42,12 @@ public final class DefaultViewCenters
 		
 		public Overworld(Optional<ResourceKey<SpaceObject>> viewCenterKey, Optional<List<Skybox>> skyboxes, AxisRotation axisRotation,
 				long rotationPeriod, DayBlending dayBlending, DayBlending sunDayBlending,
-						 Optional<MeteorEffect.ShootingStar> shootingStar, Optional<MeteorEffect.MeteorShower> meteorShower,
+						 Optional<MeteorEffect.ShootingStar> shootingStar, Optional<MeteorEffect.MeteorShower> meteorShower, Optional<MeteorEffect.TwinklingStar> twinklingStar,
 				boolean createHorizon, boolean createVoid, ViewCenter.Stars stars, ViewCenter.Fog fog, int zRotationMultiplier)
 		{
 			super(viewCenterKey, skyboxes, axisRotation,
 					rotationPeriod, dayBlending,sunDayBlending,
-					shootingStar, meteorShower, createHorizon, createVoid,
+					shootingStar, meteorShower, twinklingStar, createHorizon, createVoid,
 					stars, fog, zRotationMultiplier);
 		}
 		
@@ -65,9 +66,11 @@ public final class DefaultViewCenters
 			return OverworldConfig.shooting_star_chance.get();
 		}
 		
-		public double overrideMeteorShowerRarity()
+		public double overrideMeteorShowerRarity() { return OverworldConfig.meteor_shower_chance.get(); }
+
+		public double overrideTwinklingStarRarity()
 		{
-			return OverworldConfig.meteor_shower_chance.get();
+			return OverworldConfig.twinkling_star_chance.get();
 		}
 	}
 	
@@ -85,6 +88,7 @@ public final class DefaultViewCenters
 				
 				MeteorEffect.ShootingStar.CODEC.optionalFieldOf("shooting_star").forGetter(viewCenter -> Optional.ofNullable(viewCenter.shootingStar)),
 				MeteorEffect.MeteorShower.CODEC.optionalFieldOf("meteor_shower").forGetter(viewCenter -> Optional.ofNullable(viewCenter.meteorShower)),
+				MeteorEffect.TwinklingStar.CODEC.optionalFieldOf("twinkling_star").forGetter(viewCenter -> Optional.ofNullable(viewCenter.twinklingStar)),
 				
 				Codec.BOOL.optionalFieldOf("create_horizon", true).forGetter(viewCenter -> viewCenter.createHorizon),
 				Codec.BOOL.optionalFieldOf("create_void", true).forGetter(viewCenter -> viewCenter.createVoid),
@@ -96,12 +100,12 @@ public final class DefaultViewCenters
 		
 		public Nether(Optional<ResourceKey<SpaceObject>> viewCenterKey, Optional<List<Skybox>> skyboxes, AxisRotation axisRotation,
 				long rotationPeriod, DayBlending dayBlending, DayBlending sunDayBlending,
-					  Optional<MeteorEffect.ShootingStar> shootingStar, Optional<MeteorEffect.MeteorShower> meteorShower,
+					  Optional<MeteorEffect.ShootingStar> shootingStar, Optional<MeteorEffect.MeteorShower> meteorShower, Optional<MeteorEffect.TwinklingStar> twinklingStar,
 				boolean createHorizon, boolean createVoid, ViewCenter.Stars stars, ViewCenter.Fog fog, int zRotationMultiplier)
 		{
 			super(viewCenterKey, skyboxes, axisRotation,
 					rotationPeriod, dayBlending,sunDayBlending,
-					shootingStar, meteorShower, createHorizon, createVoid,
+					shootingStar, meteorShower, twinklingStar, createHorizon, createVoid,
 					stars, fog, zRotationMultiplier);
 		}
 		
@@ -119,6 +123,11 @@ public final class DefaultViewCenters
 		{
 			return NetherConfig.meteor_shower_chance.get();
 		}
+
+		public double overrideTwinklingStarRarity()
+		{
+			return NetherConfig.twinkling_star_chance.get();
+		}
 	}
 	
 	public static class End extends ViewCenter
@@ -135,6 +144,7 @@ public final class DefaultViewCenters
 				
 				MeteorEffect.ShootingStar.CODEC.optionalFieldOf("shooting_star").forGetter(viewCenter -> Optional.ofNullable(viewCenter.shootingStar)),
 				MeteorEffect.MeteorShower.CODEC.optionalFieldOf("meteor_shower").forGetter(viewCenter -> Optional.ofNullable(viewCenter.meteorShower)),
+				MeteorEffect.TwinklingStar.CODEC.optionalFieldOf("twinkling_star").forGetter(viewCenter -> Optional.ofNullable(viewCenter.twinklingStar)),
 				
 				Codec.BOOL.optionalFieldOf("create_horizon", true).forGetter(viewCenter -> viewCenter.createHorizon),
 				Codec.BOOL.optionalFieldOf("create_void", true).forGetter(viewCenter -> viewCenter.createVoid),
@@ -146,12 +156,12 @@ public final class DefaultViewCenters
 		
 		public End(Optional<ResourceKey<SpaceObject>> viewCenterKey, Optional<List<Skybox>> skyboxes, AxisRotation axisRotation,
 				long rotationPeriod, DayBlending dayBlending, DayBlending sunDayBlending,
-				   Optional<MeteorEffect.ShootingStar> shootingStar, Optional<MeteorEffect.MeteorShower> meteorShower,
+				   Optional<MeteorEffect.ShootingStar> shootingStar, Optional<MeteorEffect.MeteorShower> meteorShower, Optional<MeteorEffect.TwinklingStar> twinklingStar,
 				boolean createHorizon, boolean createVoid,ViewCenter.Stars stars, ViewCenter.Fog fog, int zRotationMultiplier)
 		{
 			super(viewCenterKey, skyboxes, axisRotation,
 					rotationPeriod, dayBlending,sunDayBlending,
-					shootingStar, meteorShower, createHorizon, createVoid,
+					shootingStar, meteorShower, twinklingStar, createHorizon, createVoid,
 					stars, fog, zRotationMultiplier);
 		}
 		
@@ -168,6 +178,11 @@ public final class DefaultViewCenters
 		public double overrideMeteorShowerRarity()
 		{
 			return EndConfig.meteor_shower_chance.get();
+		}
+
+		public double overrideTwinklingStarRarity()
+		{
+			return EndConfig.twinkling_star_chance.get();
 		}
 	}
 }

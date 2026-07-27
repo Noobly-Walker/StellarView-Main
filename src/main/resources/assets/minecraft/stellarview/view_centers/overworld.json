@@ -219,5 +219,84 @@
 			}
 		],
 		"probability": 10
+	},
+
+	"twinkling_star":
+	{
+		"meteor_types":
+		[
+			{
+				"weight": 1,
+				"texture_layers":
+				[
+					{
+						"texture": "stellarview:textures/environment/sky_effect/meteor/meteor_red.png",
+						"rgba": {"red": 255, "green": 255, "blue": 255, "alpha": 255},
+						"blend": true,
+						"size": 1,
+						"rotation": 0,
+						"uv": { "flip_uv": false }
+					}
+				]
+			},
+			{
+				"weight": 2,
+				"texture_layers":
+				[
+					{
+						"texture": "stellarview:textures/environment/sky_effect/meteor/meteor_orange.png",
+						"rgba": {"red": 255, "green": 255, "blue": 255, "alpha": 255},
+						"blend": true,
+						"size": 1,
+						"rotation": 0,
+						"uv": { "flip_uv": false }
+					}
+				]
+			},
+			{
+				"weight": 4,
+				"texture_layers":
+				[
+					{
+						"texture": "stellarview:textures/environment/sky_effect/meteor/meteor_yellow.png",
+						"rgba": {"red": 255, "green": 255, "blue": 255, "alpha": 255},
+						"blend": true,
+						"size": 1,
+						"rotation": 0,
+						"uv": { "flip_uv": false }
+					}
+				]
+			},
+			{
+				"weight": 8,
+				"texture_layers":
+				[
+					{
+						"texture": "stellarview:textures/environment/sky_effect/meteor/meteor_white.png",
+						"rgba": {"red": 255, "green": 255, "blue": 255, "alpha": 255},
+						"blend": true,
+						"size": 1,
+						"rotation": 0,
+						"uv": { "flip_uv": false }
+					}
+				]
+				
+			},
+			{
+				"weight": 4,
+				"texture_layers":
+				[
+					{
+						"texture": "stellarview:textures/environment/sky_effect/meteor/meteor_blue.png",
+						"rgba": {"red": 255, "green": 255, "blue": 255, "alpha": 255},
+						"blend": true,
+						"size": 1,
+						"rotation": 0,
+						"uv": { "flip_uv": false }
+					}
+				]
+			}
+		],
+		"probability": 90
 	}
 }

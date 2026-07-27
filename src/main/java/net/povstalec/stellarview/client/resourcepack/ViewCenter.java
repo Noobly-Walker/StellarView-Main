@@ -85,6 +85,8 @@ public class ViewCenter
 	protected final MeteorEffect.ShootingStar shootingStar;
 	@Nullable
 	protected final MeteorEffect.MeteorShower meteorShower;
+	@Nullable
+	protected final MeteorEffect.TwinklingStar twinklingStar;
 	
 	public final boolean createHorizon;
 	public final boolean createVoid;
@@ -105,6 +107,7 @@ public class ViewCenter
 			
 			MeteorEffect.ShootingStar.CODEC.optionalFieldOf("shooting_star").forGetter(viewCenter -> Optional.ofNullable(viewCenter.shootingStar)),
 			MeteorEffect.MeteorShower.CODEC.optionalFieldOf("meteor_shower").forGetter(viewCenter -> Optional.ofNullable(viewCenter.meteorShower)),
+			MeteorEffect.TwinklingStar.CODEC.optionalFieldOf("twinkling_star").forGetter(viewCenter -> Optional.ofNullable(viewCenter.twinklingStar)),
 			
 			Codec.BOOL.optionalFieldOf("create_horizon", true).forGetter(viewCenter -> viewCenter.createHorizon),
 			Codec.BOOL.optionalFieldOf("create_void", true).forGetter(viewCenter -> viewCenter.createVoid),
@@ -116,7 +119,7 @@ public class ViewCenter
 	
 	public ViewCenter(Optional<ResourceKey<SpaceObject>> viewCenterKey, Optional<List<Skybox>> skyboxes, AxisRotation axisRotation,
 			long rotationPeriod, DayBlending dayBlending, DayBlending sunDayBlending,
-			Optional<MeteorEffect.ShootingStar> shootingStar, Optional<MeteorEffect.MeteorShower> meteorShower,
+			Optional<MeteorEffect.ShootingStar> shootingStar, Optional<MeteorEffect.MeteorShower> meteorShower, Optional<MeteorEffect.TwinklingStar> twinklingStar,
 			boolean createHorizon, boolean createVoid, ViewCenter.Stars stars, ViewCenter.Fog fog, int zRotationMultiplier)
 	{
 		this.levelTicks = 0;
@@ -139,6 +142,7 @@ public class ViewCenter
 		
 		this.shootingStar = shootingStar.orElse(null);
 		this.meteorShower = meteorShower.orElse(null);
+		this.twinklingStar = twinklingStar.orElse(null);
 		
 		this.createHorizon = createHorizon;
 		this.createVoid = createVoid;
@@ -315,6 +319,9 @@ public class ViewCenter
 	{
 		return meteorShower;
 	}
+
+	@Nullable
+	public MeteorEffect.TwinklingStar getTwinklingStar() { return twinklingStar; }
 	
 	public boolean overrideMeteorEffects()
 	{
@@ -329,6 +336,11 @@ public class ViewCenter
 	public double overrideMeteorShowerRarity()
 	{
 		return 10;
+	}
+
+	public double overrideTwinklingStarRarity()
+	{
+		return 90;
 	}
 	
 	public boolean objectEquals(SpaceObjectRenderer spaceObject)
@@ -356,9 +368,12 @@ public class ViewCenter
 	{
 		if(shootingStar != null)
 			shootingStar.render(this, level, camera, partialTicks, stack, bufferbuilder);
-		
+
 		if(meteorShower != null)
 			meteorShower.render(this, level, camera, partialTicks, stack, bufferbuilder);
+
+		if(twinklingStar != null)
+			twinklingStar.render(this, level, camera, partialTicks, stack, bufferbuilder);
 	}
 	
 	protected float getTimeOfDay(float partialTicks)

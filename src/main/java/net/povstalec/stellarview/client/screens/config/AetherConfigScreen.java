@@ -51,6 +51,9 @@ public class AetherConfigScreen extends Screen
 		this.configList.add(new SliderConfigEntry(Component.translatable("gui.stellarview.shooting_star_chance").append(Component.literal(": ")),
 				Component.literal("\u0025"),
 				this.width, AetherConfig.shooting_star_chance));
+		this.configList.add(new SliderConfigEntry(Component.translatable("gui.stellarview.twinkling_star_chance").append(Component.literal(": ")),
+				Component.literal("\u0025"),
+				this.width, AetherConfig.twinkling_star_chance));
 		
 		this.addWidget(this.configList);
 

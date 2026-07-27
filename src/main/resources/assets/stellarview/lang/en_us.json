@@ -33,6 +33,7 @@
 	
 	"gui.stellarview.meteor_shower_chance": "Meteor Shower Chance",
 	"gui.stellarview.shooting_star_chance": "Shooting Star Chance",
+	"gui.stellarview.twinkling_star_chance": "Twinkling Star Chance",
 
 	"gui.stellarview.sol.x_offset": "Sol X offset",
 	"gui.stellarview.sol.y_offset": "Sol Y offset",

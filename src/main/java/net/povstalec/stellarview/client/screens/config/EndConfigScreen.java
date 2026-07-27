@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.povstalec.stellarview.client.screens.config.ConfigList.BooleanConfigEntry;
 import net.povstalec.stellarview.client.screens.config.ConfigList.SliderConfigEntry;
 import net.povstalec.stellarview.common.config.EndConfig;
+import net.povstalec.stellarview.common.config.NetherConfig;
 
 public class EndConfigScreen extends Screen
 {
@@ -52,6 +53,9 @@ public class EndConfigScreen extends Screen
 		this.configList.add(new SliderConfigEntry(Component.translatable("gui.stellarview.shooting_star_chance").append(Component.literal(": ")),
 				Component.literal("\u0025"),
 				this.width, EndConfig.shooting_star_chance));
+		this.configList.add(new SliderConfigEntry(Component.translatable("gui.stellarview.twinkling_star_chance").append(Component.literal(": ")),
+				Component.literal("\u0025"),
+				this.width, EndConfig.twinkling_star_chance));
 		
 		this.addWidget(this.configList);
 
